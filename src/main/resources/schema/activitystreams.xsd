@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema
+    version="1.0"
+    xml:lang="EN"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    targetNamespace="http://activitystrea.ms/spec/1.0/"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:activity="http://activitystrea.ms/spec/1.0/"
+    xmlns:atom="http://www.w3.org/2005/Atom">
+
+	<!-- Schema Documentation -->
+	<annotation>
+		<documentation>
+			XSD for Atom Activity Streams spec (on the Internet at http://activitystrea.ms/specs/atom/1.0/ and http://activitystrea.ms/head/activity-schema.html)
+		</documentation>
+	</annotation>
+	
+	<!-- also found here: http://www.kbcafe.com/rss/atom.xsd.xml -->
+	<import namespace="http://www.w3.org/2005/Atom" schemaLocation="atom-1.0.xsd"/>
+	
+	<!-- Schema organization schema: 
+	   -instances
+	   -top-level types
+	   -object types
+	   
+	   Elements within sections are organized alphabetically 
+	-->
+	
+	
+	<!-- Instances -->
+	
+	<!-- A full activity entry contains the following elements:
+	
+	    Actor, represented by atom:author (exactly one) - note that this is technically also an ObjectType
+	    Object, represented by activity:object (exactly one)
+	    Target, represented by activity:target (at most one)
+	    Verb, represented by activity:verb (exactly one)
+	    Time, represented by atom:published (exactly one)
+	    Title, represented by atom:title (at most one)
+	    Summary, represented by atom:summary (at most one)
+	    
+	-->
+	<element name="verb" type="activity:VerbType"/>
+	<element name="object" type="activity:ObjectType"/>
+	<element name="target" type="activity:ObjectType">
+	    <annotation>
+			<documentation>
+				The target of an activity is an Object Construct that represents the object to which the activity was performed. The exact meaning of an activity's target is dependent on the verb of the activity, but will often be the object of the English preposition "to". For example, in the activity "John saved a movie to his wishlist", the target of the activity is "wishlist". The activity target MUST NOT be used to identify an indirect object that is not a target of the activity. An Activity construct MAY have a target but it MUST NOT have more than one. 
+			</documentation>
+		</annotation>
+	</element>
+	<element name="object-type" type="activity:ObjectTypeType"/>
+	
+	<!-- Top-level types -->
+	<simpleType name="VerbType">
+		<annotation>
+			<documentation>
+				An IRI reference that identifies the action of the activity. This value MUST be an absolute IRI, or a IRI relative to the base IRI of http://activitystrea.ms/schema/1.0/. An Activity construct MUST have exactly one verb. 
+			</documentation>
+		</annotation>
+		<restriction base="token">
+		    <!-- Indicates that the actor has added the object to the target. For instance, adding a photo to an album.-->
+			<enumeration value="add"/>
+			<!-- Indicates that the actor has deleted the object. This implies, but does not require, the permanent destruction of the object.-->
+			<enumeration value="delete" />
+			<!-- Indicates that the actor marked the object as an item of special interest. -->
+			<enumeration value="favorite" />
+			<!-- Indicates that the actor marked the object as an item of special interest. The "like" verb is considered to be an alias of "favorite". The two verb are semantically identical.-->
+			<enumeration value="like" />
+			<!-- Indicates that the actor has removed the object from the target. -->
+			<enumeration value="remove" />
+			<!-- Indicates that the actor has called out the object to readers. In most cases, the actor did not create the object being shared, but is instead drawing attention to it.-->
+			<enumeration value="share" />
+			<!-- Indicates that the actor has removed the object from the collection of liked items.-->
+			<enumeration value="unlike" />
+			<!-- The "update" verb indicates that the actor has modified the object. Implementors SHOULD use verbs such as post where the actor is adding new items to a collection or similar. Update is reserved for modifications to existing objects or data such as changing a user's profile information. -->
+			<enumeration value="update" />
+		</restriction>
+	</simpleType>
+	
+	<complexType name="ObjectType">
+        <annotation>
+            <documentation>
+                This Object Construct identifies the primary object of the activity. An Activity construct MUST have exactly one object. 
+                
+                An object construct is a thing, real or imaginary, which participates in an activity. It may be the entity performing the activity, or the entity on which the activity was performed. An object consists of the logical components defined in the following sections. Certain object types may further refine the meaning of these components, or they may define additional components. If an object type defines an additional component then it SHOULD also define the representation of that component in one or more serialization formats. 
+            </documentation>
+        </annotation>
+        <choice minOccurs="1" maxOccurs="unbounded">
+            <element name="id" type="atom:idType" minOccurs="0" maxOccurs="1">
+                <annotation>
+                    <documentation>
+                        The id of an object construct is an IRI that uniquely identifies the object. Note that the definition of "IRI" excludes relative references. An Object construct SHOULD have an ID value, and MUST NOT have more than one.
+
+                        If an object construct does not have an ID value consumers MAY use the Permalink URL as a weaker identifier, but must in this case allow for the fact that Permalink URL is not defined to be unique across all objects and be prepared to handle duplicates. 
+                        
+                        The ID of the Object Construct is represented using the atom:id element, as defined in section 4.2.6 of [RFC4287]. 
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="name" type="atom:textType" minOccurs="1" maxOccurs="1">
+                <annotation>
+                    <documentation>
+                        Name: This string value provides a human readable display name for the object, if the object has a name. An Object construct MAY have a name, but MUST NOT have more than one. 
+                        
+                        The name of the Object Construct is represented using the atom:title element, as defined in section 4.2.14 of [RFC4287]. Consumers MUST convert the value into HTML if necessary. 
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="summary" type="atom:textType" minOccurs="0" maxOccurs="1">
+                <annotation>
+                    <documentation>
+                        Summary: This string value provides a human readable description or summary of the Object. An Object construct MAY have a summary, but MUST NOT have more than one. 
+                        
+                        The summary of the Object Construct is represented using the atom:summary element, as defined in section 4.2.13 of [RFC4287]. Consumers MUST convert the value into HTML if necessary. 
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="representativeImage" type="atom:linkType" minOccurs="0" maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        Representative Image: This IRI reference identifies an image resource which provides a visual representation of the object, intended for human consumption. An Object construct MAY have a representative image, but MUST NOT have more than one. 
+                        The representative image of the Object Construct is represented by the first atom:link element whose rel attribute value is "preview" and a whose type attribute value is an image media type. 
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="permalinkUrl" type="atom:linkType" minOccurs="0" maxOccurs="unbounded">
+                <annotation>
+                    <documentation>
+                        Permalink URL: This IRI reference identifies a resource which provides an HTML representation of the object. An Object construct MAY have a Permalink URL, but MUST NOT have more than one. 
+                        The permalink URL of the Object Construct is represented by the href attribute of an atom:link element, whose rel attribute value is "alternate" and whose type attribute value is "text/html". 
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="object-type" type="activity:ObjectTypeType" minOccurs="1" maxOccurs="1">
+                <annotation>
+                    <documentation>
+                        An IRI reference that identifies the type of object. This value MUST be an absolute IRI, or a IRI relative to the base IRI of http://activitystrea.ms/schema/1.0/. An Object construct MAY have a type, but MUST NOT have more than one.
+
+                        If no object type is present, the object has no specific type. Consumers SHOULD refer to such objects only by their names. For example, when forming an activity sentence a consumer might say "Johan posted 'My Cat'" rather than "Johan posted a photo: 'My Cat'". 
+                        
+                        The object type URL of the Object Construct is represented by an activity:object-type element as defined in Section 5.3. 
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="rating" type="activity:RatingType" minOccurs="0" maxOccurs="1">
+                <annotation>
+                    <documentation>
+                        (For 'review' object-type, required) A rating for the object given as a number between 1.0 and 5.0 inclusive with one decimal place of precision.
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="content" type="atom:contentType" minOccurs="0" maxOccurs="1">
+                <annotation>
+                    <documentation>
+                        (For 'review' object-type) The content of the review in the form of a fragment of HTML. Publishers SHOULD include any markup necessary to achieve a similar presentation to that on the publisher's own HTML pages, including any links that the service automatically adds. Processors MAY remove all HTML markup and consider the content to be plain text.
+                    </documentation>
+                </annotation>
+            </element>
+            <element name="updated" type="atom:dateTimeType" minOccurs="0" maxOccurs="1"/>
+            <element name="published" type="atom:dateTimeType" minOccurs="0" maxOccurs="1"/>
+            <any namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+        </choice>
+    </complexType>
+    
+    <simpleType name="ObjectTypeType">
+		<annotation>
+			<documentation>
+				An IRI reference that identifies the action of the activity. This value MUST be an absolute IRI, or a IRI relative to the base IRI of http://activitystrea.ms/schema/1.0/. An Activity construct MUST have exactly one verb. 
+			</documentation>
+		</annotation>
+		<restriction base="token">
+		    <!-- The "article" object type indicates that the object is an article, such as a news article, a knowledge base entry, or other similar construct. Such objects generally consist of paragraphs of text, in some cases incorporating embedded media such as photos and inline hyperlinks to other resources. -->
+			<enumeration value="article"/>
+			<!-- The "audio" object type represents audio content. -->
+			<enumeration value="audio" />
+			<!-- The "badge" object type represents a Badge or Award granted to an object (typically a person).  -->
+			<enumeration value="badge" />
+			<!-- The "collection" object type represents a generic collection of objects of any type. This object type can be used, for instance, to represent a collection of files like a folder, a collection of photos like an album, and so forth. -->
+			<enumeration value="collection" />
+			<!-- The "comment" object type represents a textual response to another object. The comment object type MUST NOT be used for other kinds of responses, such as video replies or reviews.  -->
+			<enumeration value="comment" />
+			<!-- The "course" object type represents a generic course of any type.  -->
+			<enumeration value="course" />
+			<!-- The "file" object type represents some document or other file with no additional machine-readable semantics.
+
+			It is intended that this type be used as a base type for other Objects that manifest as files, so that additional semantics can be added while providing a fallback ability for clients that do not support the more specific Object type. -->
+			<enumeration value="file" />
+			<!-- The "image" object type represents a graphical image.
+
+			Previous versions of this specification had defined a "photo" object type which SHOULD be treated as a deprecated alias of "image". -->
+			<enumeration value="image" />
+			<!-- The "person" object type represents a user account. This is often represents a person, but might also be a company or fictitious character that is being represented by a user account.   -->
+			<enumeration value="person" />
+			<!-- The "review" object type represents a primarily prose-based commentary on another object.   -->
+			<enumeration value="review" />
+			<!-- The "service" object type represents a website, personal website or blog, business, brand, or other entity that performs some kind of work for other entities, people, or services, or acts as kind of container for other objects.   -->
+			<enumeration value="service" />
+		</restriction>
+	</simpleType>
+	
+	<simpleType name="RatingType">
+		<annotation>
+			<documentation>
+				A rating for reviews
+			</documentation>
+		</annotation>
+		<restriction base="integer">
+		    <minInclusive value="1"/>
+		    <maxInclusive value="5"/>
+        </restriction>
+	</simpleType>
+	
+</schema>
