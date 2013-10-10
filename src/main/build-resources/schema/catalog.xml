@@ -1,0 +1,5 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+	<public publicId="http://activitystrea.ms/spec/1.0/" uri="activitystreams.xsd"/>
+	<public publicId="http://www.w3.org/2007/app" uri="app.xsd"/>
+	<public publicId="http://www.w3.org/2005/Atom" uri="atom.xsd"/>
+</catalog>

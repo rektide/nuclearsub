@@ -43,18 +43,20 @@
 							<!--<sourceRoot>${basedir}/target/generated/src/main/java</sourceRoot>-->
 							<xsdOptions>
 								<xsdOption>
-									<xsd>${basedir}/src/main/resources/schema/atom.xsd</xsd>
+									<xsd>${basedir}/src/main/build-resources/schema/atom.xsd</xsd>
 									<packagename>com.voodoowarez.atom</packagename>
+									<catalog>${basedir}/src/main/build-resources/schema/catalog.xml</catalog>
 								</xsdOption>
 								<!--
 								<xsdOption>
-									<xsd>${basedir}/src/main/resources/schema/activitystreams.xsd</xsd>
+									<xsd>${basedir}/src/main/build-resources/schema/activitystreams.xsd</xsd>
 									<packagename>com.voodoowarez.activitystreams</packagename>
 								</xsdOption>
 								-->
 								<xsdOption>
-									<xsd>${basedir}/src/main/resources/schema/app.xsd</xsd>
+									<xsd>${basedir}/src/main/build-resources/schema/app.xsd</xsd>
 									<packagename>com.voodoowarez.app</packagename>
+									<catalog>${basedir}/src/main/build-resources/schema/catalog.xml</catalog>
 								</xsdOption>
 								<!--
 								<xsdOption>

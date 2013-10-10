@@ -33,7 +33,7 @@
 			<xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"
 				namespace="##other" />
 		</xs:sequence>
-		<xs:attributeGroup ref="atom:undefinedAttribute"></xs:attributeGroup>
+		<!-- <xs:attributeGroup ref="atom:undefinedAttribute"></xs:attributeGroup> -->
 	</xs:complexType>
 	<xs:element name="collection" type="app:appCollectionType"></xs:element>
 	<xs:complexType name="appCollectionType">
@@ -47,7 +47,7 @@
 				namespace="##other" />
 		</xs:sequence>
 		<xs:attribute name="href" type="xs:anyURI"></xs:attribute>
-		<xs:attributeGroup ref="atom:undefinedAttribute"></xs:attributeGroup>
+		<!-- <xs:attributeGroup ref="atom:undefinedAttribute"></xs:attributeGroup> -->
 	</xs:complexType>
 	<xs:complexType name="appCategoriesType">
 		<xs:sequence>
@@ -65,7 +65,7 @@
 	</xs:complexType>
 
 	<!--  -->
-	<xs:element name="edited" type="atom:atomDateConstruct" />
+	<xs:element name="edited" type="atom:dateTimeType" />
 	<xs:complexType name="appControlType">
 		<xs:sequence>
 			<xs:element name="draft" type="app:enumYesNo" minOccurs="0"

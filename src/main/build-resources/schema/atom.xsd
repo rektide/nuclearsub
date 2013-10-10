@@ -57,9 +57,25 @@
 			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:normalizedString">
-			<xs:pattern value="\w+@(\w+\.)+\w+" />
+			<xs:pattern value="[\w.+]+@(\w+\.)+\w+" />
 		</xs:restriction>
 	</xs:simpleType>
+     <xs:complexType name="author">
+          <xs:annotation>
+               <xs:documentation>
+                   An atom Author
+               </xs:documentation>
+          </xs:annotation>
+          <xs:union base="atom:textType" />
+     </xs:complexType>
+     <xs:simpleType name="title">
+          <xs:annotation>
+               <xs:documentation>
+                   An atom Author
+               </xs:documentation>
+          </xs:annotation>
+          <xs:restriction base="atom:textType" />
+     </xs:simpleType>
 	<xs:complexType name="feedType">
 		<xs:annotation>
 			<xs:documentation>
