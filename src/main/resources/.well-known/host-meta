@@ -39,7 +39,7 @@
 	{%endblock%}
 	
 	{%block defaults%} {# DEFAULTS #}
-	{%set relsDefault = [('hub','{{host.hub||default(host.hostname+"/hub")}}',"Hub"}%}
+	{%set relsDefault = [('hub','{{host.hub||default(host.hostname+"/.well-known/hub")}}',"Hub"}%}
 	{%set propsDefault = {'foo':'bar'}%}
 	{%set lrddDefault = host.hostname + "/.well-known/lrdd"%}
 	{%set lrddTitleDefault = "Resource Descriptor"%}

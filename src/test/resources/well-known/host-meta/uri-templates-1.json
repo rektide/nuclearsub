@@ -1,0 +1,4 @@
+{
+host:{hostname:'test.yoyodyne.net'},
+uriTemplates:{"http://test-schema.yoyodyne.net/test-schema":"test-schema.yoyodyne.net/.well-known/test-schema"}
+}

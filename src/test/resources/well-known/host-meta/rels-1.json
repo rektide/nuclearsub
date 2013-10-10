@@ -1,0 +1,5 @@
+{
+host:{hostname:'test.yoyodyne.net'},
+rels:[("hub", 'rels-test.yoyodyne.net/.well-known/test-hub')]
+}
+
