@@ -33,7 +33,7 @@
 	{%endmacro%}
 
 	{%macro linkEl(url,title,rel,template)%}
-	<Link href="{{url}}" {{"rel='"+rel if rel exists}} {{"template="'+template if template exists}} {%- call writeRemainingElement("Link", title exists) %}
+	<Link href="{{url}}" {{"rel='"+rel if rel exists}} {{"template='"+template if template exists}} {%- call writeRemainingElement("Link", title exists) %}
 	  <Title>{{title}}</Title>{%endcall%}
 	{%endmacro%}
 	{%endblock%}
