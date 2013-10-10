@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- NOTE: this host-meta end point is based on draft 17 of the IETF 'Web Host Metadata Standard' -->
+<XRD xmlns='http://docs.oasis-open.org/ns/xri/xrd-1.0' 
+	 xmlns:hm='http://host-meta.net/xrd/1.0'>
+
+	{%block open%}{%endblock%}
+
+	{%block macro%} {# MACROS #}
+	{%macro finishStartTag(hasContent) %}
+	{{ ">" if hasContent|default(False) else "/>"}}
+	{%endmacro%}
+
+	{%macro endElement(tag,hadContent) %}
+	{{ "</"+tag+">" if hadContent|default(False)}}
+	{%endmacro %}
+
+	{%macro writeRemainingElement(tag,abortBody) %}
+	{%set body = caller() if caller exists and caller and not abortBody else False%}
+	{% call finishStartTag(not not body)}} %}
+	{{ body }}
+	{% call endElement(tag,not not body) %}
+	{%endmacro%}
+
+	{%macro realOrComment(real,dummy,title)%}
+	{{ "<!-- "+title+" -->" if title exists and comments }}
+	{%if real|default(False)%}
+		{{super(real)}}
+	{%elif comments%}
+		<!--
+		{{super(dummy)}}
+		-->
+	{%endif%}
+	{%endmacro%}
+
+	{%macro linkEl(url,title,rel,template)%}
+	<Link href="{{url}}" {{"rel='"+rel if rel exists}} {{"template="'+template if template exists}} {%- call writeRemainingElement("Link", title exists) %}
+	  <Title>{{title}}</Title>{%endcall%}
+	{%endmacro%}
+	{%endblock%}
+	
+	{%block defaults%} {# DEFAULTS #}
+	{%set relsDefault = [('hub','{{host.hub||default(host.hostname+"/hub")}}',"Hub"}%}
+	{%set propsDefault = {'foo':'bar'}%}
+	{%set lrddDefault = host.hostname + "/.well-known/lrdd"%}
+	{%set lrddTitleDefault = "Resource Descriptor"%}
+	{%set uriTemplatesDefault = {"http://example.net/schema/overthruster": host.hostname+"//.well-known/overthrust"}%}
+	{%set comments = True %}
+	{%endblock%}
+ 
+	{%block subject%} {# SUBJECT #}
+	{{ "<!-- Host-wide information -->" if comments exist }}
+	<Subject>{{host.hostname}}</Subject>
+	{%endblock%}
+
+	{%block properties%} {# PROPERTIES #}
+	{{ "<!-- Host wide properties -->" if comments exist }}
+	<Properties {%-call writeRemainingElement("Properties")%}
+	{%for key,value in props|default(propsDefault)|dictsort%}
+		<Property key="{{key}}">{{value}}</Property>
+	{%endfor%}
+	{%endcall%}
+	{%endblock%}
+
+	<%block rels%} {# RELS #}
+	{%set exampleOnly = rels does not exist and comments does exist%}
+	{{ "<!-- Host-wide relational links -->" }}
+	{{ "<!--" if exampleOnly }}
+	{%for link in rels|default(relsDefault)%}
+	<Link rel='{{link[0]}}' href="{{link[1]|e}}" {%-call writeRemainingElement("Link",link[2] exists)%}
+	  <Title>{{link[2]}}</Title>{%endcall%}
+	{%endfor%}
+	{{ "--> if exampleOnly }}
+	{%endblock%}
+
+	{%block lrdd%} {# LRDD #}
+	{%call commentOrReal(lrdd,lrddDefault,"Local resouce-specific descriptor document link") %}
+	<Link rel='lrdd' template='{{lrdd|default("example.net")}}'>
+	  <Title>{{lrddTitle|default(lrdTitleDefault)}}</Title>{%endcall%}
+	{%endcall%}
+	{%endblock%}
+
+	{%block templates%} {# URITEMLPATES #}
+	{%call(v) realOrComment(uriTemplates|dictsort,uriTemplatesDefault|dictsort,"URI Templates for rel-types") %}
+	{%for rel, template in v%}
+	{%linkEl(rel,"Uri-templates to locate a rel-type links on demand for any resource", Nil, template)%}
+	{%endfor%}
+	{%endblock%}
+
+	{%block close%}{%endblock%}
+</XRD>
