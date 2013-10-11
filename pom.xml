@@ -11,7 +11,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.projectodd</groupId>
-			<artifactId>nodyn</artifactId>
+			<artifactId>nodyn-verticle</artifactId>
 			<version>0.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
