@@ -160,7 +160,7 @@
             </element>
             <element name="updated" type="atom:dateTimeType" minOccurs="0" maxOccurs="1"/>
             <element name="published" type="atom:dateTimeType" minOccurs="0" maxOccurs="1"/>
-            <any namespace="##any" minOccurs="0" maxOccurs="unbounded"/>
+            <any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
         </choice>
     </complexType>
     
