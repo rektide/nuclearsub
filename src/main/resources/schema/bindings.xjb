@@ -1,46 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bindings version="2.0"
+<bindings
   xmlns="http://java.sun.com/xml/ns/jaxb"
   xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-  xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-  xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance">
+  xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify"
+  jaxb:version="2.0"
+  jaxb:extensionBindingPrefixes="simplify">
 
-	<!-- Use below bindings for CXF -->
-	<bindings schemaLocation="ShoppingService.wsdl#types1" node="/xs:schema"> 
-
-	<!-- Use below bindings for Metro -->
-	<!--bindings schemaLocation="ShoppingService.wsdl#types?schema1" 
-		node="/xs:schema"-->
-		<globalBindings 
-			collectionType="java.util.ArrayList"
-			generateValueClass="true">
-			<serializable uid="2" />
-		</globalBindings>
-
-		<schemaBindings>		
-			<package name="packagename.declared.injaxb.bindingfile"/>
-		</schemaBindings>
-		
-		<bindings node="//xs:complexType[@name='CatalogProductType']">
-			<class name="MyRenamedCatalogProductType">
-				<javadoc><![CDATA[Class-level Javadoc comment added by JAXB binding file.]]></javadoc>
-			</class>
-			<!-- Inheritance JAXB plugin (http://tinyurl.com/7ndkha4) -->
-			<inheritance:implements>java.lang.Cloneable</inheritance:implements>
-			<inheritance:implements>client.MyInterface</inheritance:implements>
-		</bindings>
-		
-		<bindings node="//xs:complexType[@name='ErrorParameterType']">
-			<bindings node=".//xs:element[@name='Value']">
-				<property name="errorValue">
-					<javadoc><![CDATA[Variable-level Javadoc comment added by JAXB binding file.]]></javadoc>
-				</property>
-			</bindings>
-			<bindings node=".//xs:attribute[@name='ParamID']">
-				<property name="myParamOverrideID" />
-			</bindings>
-		</bindings>
-	</bindings>
+	<!-- http://stackoverflow.com/questions/17794506/jaxb-simplify-plugin-vs-xjb -->
+	<jaxb:bindings schemaLocation="atom.xsd">
+		<jaxb:bindings node="//xs:complexType/xs:choice/xs:element[1]" multiple="true" >
+			<!--<simplify:as-reference-property/>-->
+			<simplify:as-element-property/>
+		</jaxb:bindings>	
+	</jaxb:bindings>
 </bindings>

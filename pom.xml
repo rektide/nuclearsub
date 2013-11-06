@@ -8,6 +8,14 @@
 	<name>nuclearsub</name>
 	<url>http://voodoowarez.com/nuclearsub</url>
 
+	<properties>
+		<jaxb2-basics.version>0.6.5</jaxb2-basics.version>
+		<xsdDir>${basedir}/src/main/resources/schema</xsdDir>
+		<schemaDir>${basedir}/src/main/resources/schema</schemaDir>
+		<catalog>${schemaDir}/catalog.xml</catalog>
+		<binding>${schemaDir}/bindings.xjb</binding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.projectodd</groupId>
@@ -20,22 +28,50 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-runtime</artifactId>
+			<version>0.6.5</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<!--
+			<plugin>
+				<groupId>com.voodoowarez.mojo.ndyn</groupId>
+				<artifactId>ndyn-maven-plugin</artifactId>
+				<version>0.9-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>fetch-nunjucks</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>ndyn</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<install>
+						<install>nunjucks</install>
+					</install>
+				</configuration>
+			</plugin>
+			-->
+
 			<plugin>
 				<groupId>org.apache.cxf</groupId>
 				<artifactId>cxf-xjc-plugin</artifactId>
 				<version>2.6.2</version>
 				<configuration>
 					<extensions>
-	<!--
+						<extension>org.jvnet.jaxb2_commons:jaxb2-basics:0.6.5</extension>
+						<!--
 						<extension>org.apache.cxf.xjcplugins:cxf-xjc-dv:2.6.2</extension>
 						<extension>org.apache.cxf.xjcplugins:cxf-xjc-ts:2.6.2</extension>
 						<extension>org.apache.cxf.xjcplugins:cxf-xjc-boolean:2.6.2</extension>
 						<extension>org.apache.cxf.xjcplugins:cxf-xjc-wsdlextension:2.6.2</extension>
-	-->
+						-->
 					</extensions>
 				</configuration>
 				<executions>
@@ -46,25 +82,46 @@
 							<goal>xsdtojava</goal>
 						</goals>
 						<configuration>
+							<extensions>
+							</extensions>
 							<!--<sourceRoot>${basedir}/target/generated/src/main/java</sourceRoot>-->
 							<xsdOptions>
 								<xsdOption>
-									<xsd>${basedir}/src/main/resources/schema/atom.xsd</xsd>
+									<xsd>${xsdDir}/atom.xsd</xsd>
 									<packagename>com.voodoowarez.atom</packagename>
-									<catalog>${basedir}/src/main/resources/schema/catalog.xml</catalog>
-									<bindingFile>classpath:/schemas/bindings.xjb</bindingFile>
+									<catalog>${catalog}</catalog>
+									<bindingFile>${binding}</bindingFile>
+									<extensionArgs>
+										<extensionArg>-extension</extensionArg>
+										<extensionArg>-XtoString</extensionArg>
+										<extensionArg>-Xequals</extensionArg>
+										<extensionArg>-XhashCode</extensionArg>
+										<extensionArg>-Xinheritance</extensionArg>
+										<extensionArg>-Xcopyable</extensionArg>
+										<extensionArg>-XenumValue</extensionArg>
+										<extensionArg>-Xsimplify</extensionArg>
+									</extensionArgs>
 								</xsdOption>
 								<xsdOption>
-									<xsd>${basedir}/src/main/resources/schema/activitystreams.xsd</xsd>
+									<xsd>${xsdDir}/activitystreams.xsd</xsd>
 									<packagename>com.voodoowarez.activitystreams</packagename>
-									<catalog>${basedir}/src/main/resources/schema/catalog.xml</catalog>
-									<bindingFile>classpath:/schemas/bindings.xjb</bindingFile>
+									<catalog>${catalog}</catalog>
+									<bindingFile>${bindings}</bindingFile>
+									<extensionArgs>
+										<extensionArg>-XtoString</extensionArg>
+										<extensionArg>-Xequals</extensionArg>
+										<extensionArg>-XhashCode</extensionArg>
+										<extensionArg>-Xinheritance</extensionArg>
+										<extensionArg>-Xcopyable</extensionArg>
+										<extensionArg>-XenumValue</extensionArg>
+										<extensionArg>-Xsimplify</extensionArg>
+									</extensionArgs>
 								</xsdOption>
 								<xsdOption>
-									<xsd>${basedir}/src/main/resources/schema/app.xsd</xsd>
+									<xsd>${xsdDir}/app.xsd</xsd>
 									<packagename>com.voodoowarez.app</packagename>
-									<catalog>${basedir}/src/main/resources/schema/catalog.xml</catalog>
-									<bindingFile>classpath:/schemas/bindings.xjb</bindingFile>
+									<catalog>${catalog}</catalog>
+									<bindingFile>${bindings}</bindingFile>
 								</xsdOption>
 								<!--
 								<xsdOption>
@@ -78,6 +135,20 @@
 						</configuration>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.jvnet.jaxb2_commons</groupId>
+						<artifactId>jaxb2-basics</artifactId>
+						<version>0.6.5</version>
+					</dependency>
+					<!--
+					<dependency>
+						<groupId>org.apache.cxf</groupId>
+						<artifactId>cxf-xjc-ts</artifactId>
+						<version>2.2.12</version>
+					</dependency>
+					-->
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
